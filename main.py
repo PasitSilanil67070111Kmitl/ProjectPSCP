@@ -62,7 +62,7 @@ class totoaldata(BaseModel):
     scoreassinment:int
     myscore:int
 
-@app.post('/totoaldata')
+@app.post('/totaldata')
 def insert(values: totoaldata):
     cursor = db_connect().cursor()
     cursor.execute("INSERT INTO table_database (user_id,subject_id,subject_name,subject_assignment,score_assignment,my_score) VALUES (%s, %s, %s,%s, %s, %s)", 
