@@ -55,18 +55,18 @@ def insert(values: Signup):
 #python -m uvicorn main:app --reload
 
 class totoaldata(BaseModel):
-    userid:str
-    subjectid:int
-    subjectname:str
-    subjectassignment:str
-    scoreassinment:int
-    myscore:int
+    userid:int
+    subject_id:int
+    subject_name:str
+    subjectAssignment:str
+    scoreAssignment:int
+    myScore:int
 
 @app.post('/totaldata')
 def insert(values: totoaldata):
     cursor = db_connect().cursor()
     cursor.execute("INSERT INTO table_database (user_id,subject_id,subject_name,subject_assignment,score_assignment,my_score) VALUES (%s, %s, %s,%s, %s, %s)", 
-                    (values.userid, values.subjectid, values.subjectname , values.subjectassignment , values.scoreassinment , values.myscore))
+                    (values.userid, values.subject_id, values.subject_name , values.subjectAssignment , values.scoreAssignment , values.myScore))
     cursor.connection.commit()
     return {"message": "Successful"}
 
