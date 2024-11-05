@@ -92,12 +92,12 @@ def login(request: LoginRequest):
 #ดึงข้อมูล
 class Search(BaseModel):
     search: str
-    
 
-def get_data_from_db():
+@app.get("/data")
+def get_data_from_db(request:Search):
     connection = db_connect()
     cursor = connection.cursor()
-    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", ("PSCP"))
+    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", (request.search))
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
@@ -147,7 +147,7 @@ def get_data_from_db():
     else:
         tenor = ""
     data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result),"tenor":tenor})
-    return data
+    return {"data": data}
 
 #ตัวเทส
 #data = [
@@ -194,10 +194,10 @@ def get_data_from_db():
 #print(data)
 #print(data)
 
-@app.get("/data")
-def read_data():
-    data = get_data_from_db()
-    return {"data": data}
+#@app.get("/data")
+#def read_data():
+#   data = get_data_from_db(request: Search)
+ #   return {"data": data}
 
 #uvicorn main:app --reload
 #python -m uvicorn main:app --reload
