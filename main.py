@@ -77,7 +77,7 @@ def login(request: LoginRequest):
     connection = db_connect()
     cursor = connection.cursor()
     
-    cursor.execute("SELECT id, username, password FROM table_user WHERE username = %s", (request.username_login,))
+    cursor.execute("SELECT username, password FROM table_user WHERE username = %s", (request.username_login,))
     user = cursor.fetchone()
     
     cursor.close()
@@ -106,6 +106,38 @@ def get_data_from_db():
         data.append(row_data)
     cursor.close()
     connection.close()
+    total_myscore = 0
+    total_score_assignment = 0
+    result = ""
+    total_result = []
+    for key in data:
+        total_myscore += int(key["my_score"])
+        total_score_assignment += int(key["score_assignment"])
+    if total_myscore >= 80:
+        result = "A"
+        total_result.append(4.00)
+    elif total_myscore >=75:
+        result = "B+"
+        total_result.append(3.50)
+    elif total_myscore >=70:
+        result = "B"
+        total_result.append(3.00)
+    elif total_myscore >=65:
+        result = "C+"
+        total_result.append(2.50)
+    elif total_myscore >=60:
+        result = "C"
+        total_result.append(2.00)
+    elif total_myscore >=55:
+        result = "D+"
+        total_result.append(1.50)
+    elif total_myscore >=50:
+        result = "D"
+        total_result.append(1.00)
+    else:
+        result = "F"
+        total_result.append(0)
+    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result) })
     return data
 
 #ตัวเทส
@@ -114,43 +146,12 @@ def get_data_from_db():
 #    {"id": "102", "subject_assignment": "Final", "score_assignment": "30", "my_score": "25"},
  #   {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
  # ]
-data = get_data_from_db()
-total_myscore = 0
-total_score_assignment = 0
-result = ""
-total_result = []
-for key in data:
-    total_myscore += int(key["my_score"])
-    total_score_assignment += int(key["score_assignment"])
-if total_myscore >= 80:
-    result = "A"
-    total_result.append(4.00)
-elif total_myscore >=75:
-    result = "B+"
-    total_result.append(3.50)
-elif total_myscore >=70:
-    result = "B"
-    total_result.append(3.00)
-elif total_myscore >=65:
-    result = "C+"
-    total_result.append(2.50)
-elif total_myscore >=60:
-    result = "C"
-    total_result.append(2.00)
-elif total_myscore >=55:
-    result = "D+"
-    total_result.append(1.50)
-elif total_myscore >=50:
-    result = "D"
-    total_result.append(1.00)
-else:
-    result = "F"
-    total_result.append(0)
-data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result) })
+
 #print(data)
 
 @app.get("/data")
 def read_data():
+    data = get_data_from_db()
     return {"data": data}
 #uvicorn main:app --reload
 #python -m uvicorn main:app --reload
