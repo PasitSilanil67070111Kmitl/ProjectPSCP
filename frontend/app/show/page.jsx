@@ -15,16 +15,16 @@ export default function Page() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
-      <div className="p-6 max-w-[450px]">
+      <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
         <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">รหัสวิชา</h1>
         <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">ชื่อวิชา</h1>
         <div className="flex justify-center gap-10">
-          <table className="bg-white text-black">
+          <table className="bg-white text-black w-[500px]">
             <thead>
               <tr>
-                <th className="border border-gray-300 px-4 py-2">หัวข้อ</th>
-                <th className="border border-gray-300 px-4 py-2">สัดส่วนคะแนน</th>
-                <th className="border border-gray-300 px-4 py-2">คะแนนของเรา</th>
+                <th className="border border-gray-300 px-4 py-2 ">หัวข้อ</th>
+                <th className="border border-gray-300 px-4 py-2 ">สัดส่วนคะแนน</th>
+                <th className="border border-gray-300 px-4 py-2 ">คะแนนของเรา</th>
               </tr>
             </thead>
             <tbody>
@@ -37,27 +37,33 @@ export default function Page() {
               ))}
             </tbody>
             </table>
-            <table className="bg-white text-black">
+        </div>
+        <br></br>
+        <table className="bg-white text-black w-[500px]">
             <thead>
               <tr>
                 <th className="border border-gray-300 px-4 py-2">เกรด</th>
                 <th className="border border-gray-300 px-4 py-2">คะแนนเต็ม</th>
                 <th className="border border-gray-300 px-4 py-2">คะแนนรวม</th>
-                <th className="border border-gray-300 px-4 py-2">GPA</th>
               </tr>
             </thead>
             <tbody>
-            {data.map((item) => (
+            {data.length > 0 &&  (
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2">{item.result}</td>
-                  <td className="border border-gray-300 px-4 py-2">{item.total_a}</td>
-                  <td className="border border-gray-300 px-4 py-2">{item.total_s}</td>
-                  <td className="border border-gray-300 px-4 py-2">{item.total_result}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[0].result}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[0].total_a}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[0].total_s}</td>
                 </tr>
-              ))}
+              )}
+              <br></br>
+              {data.length > 0 && (
+              <tr>
+                <td className="border border-gray-300 px-4 py-2">GPA</td>
+                <td className="border border-gray-300 px-4 py-2">{data[0].total_result}</td>
+              </tr>
+              )}
             </tbody>
           </table>
-        </div>
       </div>
     </div>
   );

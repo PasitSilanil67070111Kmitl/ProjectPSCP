@@ -144,8 +144,8 @@ def get_data_from_db():
 #data = [
 #    {"id": "101", "subject_assignment": "Midterm", "score_assignment": "20", "my_score": "18"},
 #    {"id": "102", "subject_assignment": "Final", "score_assignment": "30", "my_score": "25"},
- #   {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
- # ]
+#    {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
+# ]
 
 #print(data)
 
