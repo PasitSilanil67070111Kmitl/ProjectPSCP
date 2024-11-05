@@ -77,14 +77,17 @@ def login(request: LoginRequest):
     connection = db_connect()
     cursor = connection.cursor()
     
-    cursor.execute("SELECT id, username, password FROM table_user WHERE username = %s", (request.username,))
+    cursor.execute("SELECT id, username, password FROM table_user WHERE username = %s", (request.username_login,))
     user = cursor.fetchone()
     
     cursor.close()
     connection.close()
-    
-    if user and user[2] == request.password:
+
+    if user and user[2] == request.password_login:
+        print("OK")
         return {"message": "Login successful", "user_id": user[0], "username": user[1]}
+    else:
+        print("No")
 
 #ดึงข้อมูล
 def get_data_from_db():
@@ -105,17 +108,13 @@ def get_data_from_db():
     connection.close()
     return data
 
-#@app.get("/data")
-#def read_data():
-#    data = get_data_from_db()
-#    return {"data": data}
-
 #ตัวเทส
-data = [
-    {"id": "101", "subject_assignment": "Midterm", "score_assignment": "20", "my_score": "18"},
-    {"id": "102", "subject_assignment": "Final", "score_assignment": "30", "my_score": "25"},
-    {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
-  ]
+#data = [
+#    {"id": "101", "subject_assignment": "Midterm", "score_assignment": "20", "my_score": "18"},
+#    {"id": "102", "subject_assignment": "Final", "score_assignment": "30", "my_score": "25"},
+ #   {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
+ # ]
+data = get_data_from_db()
 total_myscore = 0
 total_score_assignment = 0
 result = ""
@@ -148,10 +147,10 @@ else:
     result = "F"
     total_result.append(0)
 data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result) })
-print(data)
+#print(data)
+
 @app.get("/data")
 def read_data():
     return {"data": data}
-
 #uvicorn main:app --reload
 #python -m uvicorn main:app --reload
