@@ -92,15 +92,14 @@ def login(request: LoginRequest):
 #ดึงข้อมูล
 class Search(BaseModel):
     search: str
-
 @app.post("/data")
 def get_data_from_db(search: Search):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
-            "SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE ?",
-            (f"%{search.search}%",)
-        )
+        "SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE ?",
+        ('%' + search.search + '%',)
+    )
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
