@@ -19,7 +19,7 @@ def main():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ปรับเป็น URL ที่ต้องการอนุญาต
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -73,7 +73,15 @@ def insert(values: totoaldata):
 def get_data_from_db():
     cursor = db_connect().cursor()
     cursor.execute("SELECT * FROM table_subject")
-    data = cursor.fetchall()
+    rows = cursor.fetchall()
+    data = {}
+    for row in rows:
+        for column, value in row.items():
+            if column not in data:
+                data[column] = []
+            data[column].append(value)
+    
+    cursor.close()
     return data
 
 @app.get("/data")
