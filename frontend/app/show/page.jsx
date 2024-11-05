@@ -5,7 +5,24 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [data, setData] = useState([]);
-
+  const [ search , Search ] = useState("")
+    
+    async function onCreate(){
+        try{
+            const response = await fetch('http://127.0.0.1:8000/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username_login, password_login }),
+            });
+   
+           const result = await response.json();
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
   useEffect(() => {
     fetch("http://127.0.0.1:8000/data")
       .then((response) => response.json())
@@ -16,8 +33,17 @@ export default function Page() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
       <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
-        <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">รหัสวิชา</h1>
-        <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">ชื่อวิชา</h1>
+      <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">ดูคะแนน</h1>
+      <input
+        value={search}
+        onChange={(e) => Search(e.target.value)}
+        type="text"
+        className="w-full border border-zinc-300 px-4 p-2 mb-2 rounded-xl"
+        placeholder="ค้นหาวิชา"
+        />
+      <button 
+        onClick={onCreate} 
+        className="bg-blue-300 p-2 text-xl mb-4 w-full rounded-xl text-white">ค้นหา</button>
         <div className="flex justify-center gap-10">
           <table className="bg-white text-black w-[500px]">
             <thead>

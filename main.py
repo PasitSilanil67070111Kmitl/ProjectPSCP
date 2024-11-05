@@ -90,10 +90,13 @@ def login(request: LoginRequest):
         print("No")
 
 #ดึงข้อมูล
-def get_data_from_db():
+class Search(BaseModel):
+    search: str
+
+def get_data_from_db(searchdata: Search):
     connection = db_connect()
     cursor = connection.cursor()
-    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database")
+    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", (searchdata.search))
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
@@ -153,5 +156,6 @@ def get_data_from_db():
 def read_data():
     data = get_data_from_db()
     return {"data": data}
+
 #uvicorn main:app --reload
 #python -m uvicorn main:app --reload
