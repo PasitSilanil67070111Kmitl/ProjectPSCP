@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI , Query
 import MySQLdb
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -94,10 +94,13 @@ class Search(BaseModel):
     search: str
 
 @app.get("/data")
-def get_data_from_db(request:Search):
+def get_data_from_db(subject_name: str = Query("", description="ชื่อวิชาที่ต้องการค้นหา")):
     connection = db_connect()
     cursor = connection.cursor()
-    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", (request.search))
+    cursor.execute(
+            "SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE ?",
+            (f"%{subject_name}%",)
+        )
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]

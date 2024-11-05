@@ -18,6 +18,7 @@ export default function Page() {
             });
    
            const result = await response.json();
+           setData(result.data);
         }
         catch(err){
             console.log(err)
