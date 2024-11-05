@@ -76,16 +76,17 @@ export default function Page() {
             <tbody>
             {data.length > 0 &&  (
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2">{data[0].result}</td>
-                  <td className="border border-gray-300 px-4 py-2">{data[0].total_a}</td>
-                  <td className="border border-gray-300 px-4 py-2">{data[0].total_s}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].result}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_a}</td>
+                  <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_s}</td>
                 </tr>
               )}
               <br></br>
               {data.length > 0 && (
               <tr>
                 <td className="border border-gray-300 px-4 py-2">GPA</td>
-                <td className="border border-gray-300 px-4 py-2">{data[0].total_result}</td>
+                <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_result}</td>
+                <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].tenor}</td>
               </tr>
               )}
             </tbody>
