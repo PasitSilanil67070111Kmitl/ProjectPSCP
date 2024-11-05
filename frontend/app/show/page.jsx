@@ -55,13 +55,19 @@ export default function Page() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item) => (
-                <tr key={item.id}>
+            {data.length > 0 ? (
+              data.map((item) => (
+              <tr key={item.id}>
                   <td className="border border-gray-300 px-4 py-2">{item.subject_assignment}</td>
                   <td className="border border-gray-300 px-4 py-2">{item.score_assignment}</td>
                   <td className="border border-gray-300 px-4 py-2">{item.my_score}</td>
-                </tr>
-              ))}
+              </tr>
+            ))
+            ) : (
+              <tr>
+                  <td colSpan="3" className="border border-gray-300 px-4 py-2 text-center">ไม่มีข้อมูล</td>
+              </tr>
+            )}
             </tbody>
             </table>
         </div>
