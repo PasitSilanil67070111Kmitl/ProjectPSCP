@@ -71,17 +71,23 @@ def insert(values: totoaldata):
     return {"message": "Successful"}
 
 def get_data_from_db():
-    cursor = db_connect().cursor()
-    cursor.execute("SELECT * FROM table_subject")
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM table_database")
     rows = cursor.fetchall()
-    data = {}
+
+    # ดึงชื่อคอลัมน์จาก cursor description
+    columns = [col[0] for col in cursor.description]
+    
+    # สร้าง dictionary แยกตามคอลัมน์
+    data = {column: [] for column in columns}
     for row in rows:
-        for column, value in row.items():
-            if column not in data:
-                data[column] = []
+        for column, value in zip(columns, row):
             data[column].append(value)
     
     cursor.close()
+    connection.close()
+    
     return data
 
 @app.get("/data")
