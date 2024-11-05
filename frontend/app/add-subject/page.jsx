@@ -44,9 +44,9 @@ export default function Page() {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-[url('https://img.freepik.com/free-photo/artistic-blurry-colorful-wallpaper-background_58702-8283.jpg')] bg-cover bg-center h-64 rounded-lg shadow-md">
+        <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
             <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
-                <h1 className="font-bold text-4xl text-center mb-2 text-sky-500">เพิ่มรายวิชา</h1>
+                <h1 className="font-bold text-4xl text-center mb-2 text-black">เพิ่มรายวิชา</h1>
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
