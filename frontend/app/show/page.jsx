@@ -28,11 +28,31 @@ export default function Page() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 px-4 py-2">{item.subject_name}</td>
+              {data.map((item) => (
+                <tr>
                   <td className="border border-gray-300 px-4 py-2">{item.subject_assignment}</td>
+                  <td className="border border-gray-300 px-4 py-2">{item.score_assignment}</td>
                   <td className="border border-gray-300 px-4 py-2">{item.my_score}</td>
+                </tr>
+              ))}
+            </tbody>
+            </table>
+            <table className="bg-white text-black">
+            <thead>
+              <tr>
+                <th className="border border-gray-300 px-4 py-2">เกรด</th>
+                <th className="border border-gray-300 px-4 py-2">คะแนนเต็ม</th>
+                <th className="border border-gray-300 px-4 py-2">คะแนนรวม</th>
+                <th className="border border-gray-300 px-4 py-2">GPA</th>
+              </tr>
+            </thead>
+            <tbody>
+            {data.map((item) => (
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2">{item.result}</td>
+                  <td className="border border-gray-300 px-4 py-2">{item.total_a}</td>
+                  <td className="border border-gray-300 px-4 py-2">{item.total_s}</td>
+                  <td className="border border-gray-300 px-4 py-2">{item.total_result}</td>
                 </tr>
               ))}
             </tbody>

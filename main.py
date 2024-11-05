@@ -3,6 +3,7 @@ import MySQLdb
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+#เชื่อมต่อ 
 def db_connect():
     connect = MySQLdb.connect(
         host="localhost",
@@ -13,9 +14,6 @@ def db_connect():
     return connect
 
 app = FastAPI()
-@app.get('/')
-def main():
-    return{"hello":"world"}
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,6 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#บันทึกข้อมูล
 class Subject(BaseModel):
     id:int
     name: str
@@ -51,8 +50,6 @@ def insert(values: Signup):
                     (values.userid, values.username, values.password))
     cursor.connection.commit()
     return {"message": "Successful"}
-#uvicorn main:app --reload
-#python -m uvicorn main:app --reload
 
 class totoaldata(BaseModel):
     userid:int
@@ -70,10 +67,30 @@ def insert(values: totoaldata):
     cursor.connection.commit()
     return {"message": "Successful"}
 
+#login
+class LoginRequest(BaseModel):
+    username_login: str
+    password_login: str
+
+@app.post('/login')
+def login(request: LoginRequest):
+    connection = db_connect()
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT id, username, password FROM table_user WHERE username = %s", (request.username,))
+    user = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+    
+    if user and user[2] == request.password:
+        return {"message": "Login successful", "user_id": user[0], "username": user[1]}
+
+#ดึงข้อมูล
 def get_data_from_db():
     connection = db_connect()
     cursor = connection.cursor()
-    cursor.execute("SELECT id, subject_name, subject_assignment, my_score FROM table_database")
+    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database")
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
@@ -84,18 +101,57 @@ def get_data_from_db():
         for column, value in zip(columns, row):
             row_data[column] = value
         data.append(row_data)
-    
     cursor.close()
     connection.close()
-    
     return data
 
+#@app.get("/data")
+#def read_data():
+#    data = get_data_from_db()
+#    return {"data": data}
 
+#ตัวเทส
+data = [
+    {"id": "101", "subject_assignment": "Midterm", "score_assignment": "20", "my_score": "18"},
+    {"id": "102", "subject_assignment": "Final", "score_assignment": "30", "my_score": "25"},
+    {"id": "103", "subject_assignment": "เข้าเรียน", "score_assignment": "10", "my_score": "10"}
+  ]
+total_myscore = 0
+total_score_assignment = 0
+result = ""
+total_result = []
+for key in data:
+    total_myscore += int(key["my_score"])
+    total_score_assignment += int(key["score_assignment"])
+if total_myscore >= 80:
+    result = "A"
+    total_result.append(4.00)
+elif total_myscore >=75:
+    result = "B+"
+    total_result.append(3.50)
+elif total_myscore >=70:
+    result = "B"
+    total_result.append(3.00)
+elif total_myscore >=65:
+    result = "C+"
+    total_result.append(2.50)
+elif total_myscore >=60:
+    result = "C"
+    total_result.append(2.00)
+elif total_myscore >=55:
+    result = "D+"
+    total_result.append(1.50)
+elif total_myscore >=50:
+    result = "D"
+    total_result.append(1.00)
+else:
+    result = "F"
+    total_result.append(0)
+data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result) })
+print(data)
 @app.get("/data")
 def read_data():
-    data = get_data_from_db()
     return {"data": data}
 
-#@app.get("/data")
-#def get_data():
-#    return {"data": ["Test 1", "Test 2", "Test 3" ,"Test 4"]}
+#uvicorn main:app --reload
+#python -m uvicorn main:app --reload
