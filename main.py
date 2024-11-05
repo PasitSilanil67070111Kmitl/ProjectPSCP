@@ -83,7 +83,7 @@ def login(request: LoginRequest):
     cursor.close()
     connection.close()
 
-    if user and user[2] == request.password_login:
+    if user and user[1] == request.password_login:
         print("OK")
         return {"message": "Login successful", "user_id": user[0], "username": user[1]}
     else:
@@ -93,13 +93,13 @@ def login(request: LoginRequest):
 class Search(BaseModel):
     search: str
 
-@app.get("/data")
-def get_data_from_db(subject_name: str = Query("", description="ชื่อวิชาที่ต้องการค้นหา")):
+@app.post("/data")
+def get_data_from_db(search: Search):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
             "SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE ?",
-            (f"%{subject_name}%",)
+            (f"%{search.search}%",)
         )
     rows = cursor.fetchall()
 

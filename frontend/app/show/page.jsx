@@ -56,7 +56,7 @@ export default function Page() {
             </thead>
             <tbody>
               {data.map((item) => (
-                <tr>
+                <tr key={item.id}>
                   <td className="border border-gray-300 px-4 py-2">{item.subject_assignment}</td>
                   <td className="border border-gray-300 px-4 py-2">{item.score_assignment}</td>
                   <td className="border border-gray-300 px-4 py-2">{item.my_score}</td>
