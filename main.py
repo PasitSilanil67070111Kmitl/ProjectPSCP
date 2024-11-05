@@ -92,11 +92,12 @@ def login(request: LoginRequest):
 #ดึงข้อมูล
 class Search(BaseModel):
     search: str
+    
 
-def get_data_from_db(searchdata: Search):
+def get_data_from_db():
     connection = db_connect()
     cursor = connection.cursor()
-    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", (searchdata.search))
+    cursor.execute("SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s", ("PSCP"))
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
