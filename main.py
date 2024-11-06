@@ -65,7 +65,20 @@ def insert(values: totoaldata):
     cursor.execute("INSERT INTO table_database (user_id,subject_id,subject_name,subject_assignment,score_assignment,my_score) VALUES (%s, %s, %s,%s, %s, %s)", 
                     (values.userid, values.subject_id, values.subject_name , values.subjectAssignment , values.scoreAssignment , values.myScore))
     cursor.connection.commit()
-    return {"message": "Successful"}
+
+
+#อัพเดทข้อมูล
+class update(BaseModel):
+    newmyscore : int
+    userid:int
+    subjectAssignment:str
+    
+@app.put('/updatedata')
+def update_data(values: update):
+    cursor = db_connect().cursor()
+    cursor.execute("""UPDATE table_database SET  my_score = %s WHERE user_id = %s AND subject_assignment = %s """, 
+    (values.newmyscore))
+    cursor.connection.commit()
 
 #login
 class LoginRequest(BaseModel):
@@ -116,9 +129,12 @@ def get_data_from_db(search: Search):
     total_score_assignment = 0
     result = ""
     total_result = []
+    subject = []
     for key in data:
         total_myscore += int(key["my_score"])
         total_score_assignment += int(key["score_assignment"])
+        if key["subject_name"] not in subject:
+            subject.append(key["subject_name"])
     if total_myscore >= 80:
         result = "A"
         total_result.append(4.00)
@@ -144,11 +160,11 @@ def get_data_from_db(search: Search):
         result = "F"
         total_result.append(0)
 
-    if sum(total_result)/len(total_result) <2.00:
+    if sum(total_result)/len(subject) <2.00:
         tenor = "ติดโปร"
     else:
         tenor = ""
-    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(total_result),"tenor":tenor})
+    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(subject),"tenor":tenor})
     return {"data": data}
 
 #ตัวเทส

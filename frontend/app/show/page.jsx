@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 export default function Page() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-
+  const [newmyscore, setScore] = useState("");
   async function onCreate() {
     try {
       const response = await fetch('http://127.0.0.1:8000/data', {
@@ -22,7 +22,22 @@ export default function Page() {
       console.log("Error:", err);
     }
   }
+  async function onUpdate() {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/updatepdata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newmyscore }),
+      });
 
+      const result = await response.json();
+      setData(result.data);
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  }
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
       <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
@@ -53,9 +68,17 @@ export default function Page() {
               {data.length > 1 ? (
                 data.slice(0, -1).map((item) => (
                   <tr key={item.id}>
-                    <td className="border border-gray-300 px-4 py-2">{item.subject_assignment}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.score_assignment}</td>
-                    <td className="border border-gray-300 px-4 py-2">{item.my_score}</td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {item.subject_assignment}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {item.score_assignment}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <input type='text' 
+                      value={newmyscore} 
+                      onChange={(e) => setScore(e.target.value)} >
+                      {item.my_score}</input></td>
                   </tr>
                 ))
               ) : (
@@ -82,6 +105,7 @@ export default function Page() {
                 <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_a}</td>
                 <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_s}</td>
               </tr>
+              <br></br>
               <tr>
                 <td className="border border-gray-300 px-4 py-2">GPA</td>
                 <td className="border border-gray-300 px-4 py-2">{data[data.length - 1].total_result}</td>
@@ -90,6 +114,12 @@ export default function Page() {
             </tbody>
           </table>
         )}
+        <button 
+          onClick={onUpdate} 
+          className="bg-blue-300 p-2 text-xl mb-4 w-full rounded-xl text-white"
+        >
+          บันทึกการเปลี่ยนแปลง
+        </button>
       </div>
     </div>
   );

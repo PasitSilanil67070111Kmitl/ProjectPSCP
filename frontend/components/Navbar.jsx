@@ -4,7 +4,7 @@ export function Navbar(props){
     return(
         <div className="bg-blue-500 text-white flex justify-between p-4">
             <div className="flex gap-2">
-                <House />
+                <a href={"/"}><House /></a>
                 <Menu />
             </div>
             <a className="flex gap-2">
