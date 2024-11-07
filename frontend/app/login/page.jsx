@@ -1,11 +1,12 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 export default function Page() {
     const [ username_login , Name ] = useState("")
     const [ password_login , Password ] = useState("")
-    
+    const router = useRouter()
     async function onCreate(){
         try{
             const response = await fetch('http://127.0.0.1:8000/login', {
@@ -17,6 +18,12 @@ export default function Page() {
             });
    
            const result = await response.json();
+           if (!result.success){
+            return alert("Login fail")
+           }
+           localStorage.setItem("user_id" , result.user_id)
+           alert("Login Complete")
+           router.push("/")
         }
         catch(err){
             console.log(err)

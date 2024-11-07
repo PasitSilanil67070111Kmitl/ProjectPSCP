@@ -81,10 +81,10 @@ def update_data(values: update):
     (values.newmyscore))
     cursor.connection.commit()
 
-class Search(BaseModel):
+class search_assignment(BaseModel):
     search_update: str
 @app.post("/update")
-def get_data_from_db(search_update: Search):
+def get_data_from_db(search_update: search_assignment):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
@@ -178,17 +178,18 @@ def login(request: LoginRequest):
     connection = db_connect()
     cursor = connection.cursor()
     
-    cursor.execute("SELECT username, password FROM table_user WHERE username = %s", (request.username_login,))
+    cursor.execute("SELECT  user_id , username, password FROM table_user WHERE username = %s", (request.username_login,))
     user = cursor.fetchone()
     
     cursor.close()
     connection.close()
 
-    if user and user[1] == request.password_login:
+    if user and user[2] == request.password_login:
         print("OK")
-        return {"message": "Login successful", "user_id": user[0], "username": user[1]}
+        return {"success" : True , "message": "Login successful", "user_id": user[0], "username": user[1]}
     else:
         print("No")
+        return {"success" : False}
 
 #ดึงข้อมูล
 class Search(BaseModel):

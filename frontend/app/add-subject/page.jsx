@@ -1,17 +1,23 @@
 "use client"
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Page() {
     const [name, setName] = useState("");
     const [subID, setSubID] = useState("");
-    const id = 67070111;
+    const [id, setId] = useState(null);
     const [subjectAssignment, setAssignment] = useState("");
     const [myScore, setMyScore] = useState("");
     const [scoreAssignment, setScore] = useState("");
     const [assignmentList, setAssignmentList] = useState([]);
+    const router = useRouter()
 
     async function onCreate() {
+        if (id === null){
+            router.push("/login")
+            return alert("please login first")
+        }
         const userid = id;
         const subject_id = subID;
         const subject_name = name;
@@ -43,8 +49,12 @@ export default function Page() {
         }
     }
 
+    useEffect(() => {
+        const _id = localStorage.getItem("user_id")
+         if (_id) setId(+_id)
+     }, []);
     return (
-        <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
+        <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md text-black">
             <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
                 <h1 className="font-bold text-4xl text-center mb-2 text-black">เพิ่มรายวิชา</h1>
                 <input
