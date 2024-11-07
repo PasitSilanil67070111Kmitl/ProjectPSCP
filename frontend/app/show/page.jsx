@@ -6,6 +6,7 @@ export default function Page() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [newmyscore, setScore] = useState("");
+  const [id_sub, setId] = useState("");
   async function onCreate() {
     try {
       const response = await fetch('http://127.0.0.1:8000/data', {
@@ -29,7 +30,7 @@ export default function Page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newmyscore }),
+        body: JSON.stringify({ id_sub,newmyscore }),
       });
 
       const result = await response.json();
@@ -79,6 +80,12 @@ export default function Page() {
                       value={newmyscore} 
                       onChange={(e) => setScore(e.target.value)} >
                       {item.my_score}</input></td>
+                    <td className=''>
+                      <input type='text'
+                      value={id_sub}
+                      onChange={(e) => setId(e.target.value)} >
+                      {item.id}</input>
+                    </td>
                   </tr>
                 ))
               ) : (

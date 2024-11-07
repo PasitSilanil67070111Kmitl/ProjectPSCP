@@ -69,6 +69,7 @@ def insert(values: totoaldata):
 
 #อัพเดทข้อมูล
 class update(BaseModel):
+    id_sub : int
     newmyscore : int
     userid:int
     subjectAssignment:str
@@ -76,7 +77,7 @@ class update(BaseModel):
 @app.put('/updatedata')
 def update_data(values: update):
     cursor = db_connect().cursor()
-    cursor.execute("""UPDATE table_database SET  my_score = %s WHERE user_id = %s AND subject_assignment = %s """, 
+    cursor.execute("""UPDATE table_database SET  my_score = %s WHERE id = %s AND user_id = %s AND subject_assignment = %s """, 
     (values.newmyscore))
     cursor.connection.commit()
 
