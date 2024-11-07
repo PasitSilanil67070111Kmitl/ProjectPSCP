@@ -126,8 +126,9 @@ def get_data_from_db(search: Search):
         data.append(row_data)
     cursor.close()
     connection.close()
-
+ 
     def all_subject():
+        subject = [""]
         connection = db_connect()
         cursor = connection.cursor()
         cursor.execute(
@@ -146,13 +147,13 @@ def get_data_from_db(search: Search):
         for key in allsubject:
             if key["subject_name"] not in subject:
                 subject.append(key["subject_name"])
+        return subject
 
     total_myscore = 0
     total_score_assignment = 0
     result = ""
 
     total_result = []
-    subject = []
     for key in data:
         total_myscore += int(key["my_score"])
         total_score_assignment += int(key["score_assignment"])
@@ -182,11 +183,11 @@ def get_data_from_db(search: Search):
         result = "F"
         total_result.append(0)
 
-    if sum(total_result)/len(subject) <2.00:
+    if sum(total_result)/len(all_subject()) <2.00:
         tenor = "ติดโปร"
     else:
         tenor = ""
-    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":sum(total_result)/len(subject),"tenor":tenor})
+    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":f"{sum(total_result)/len(all_subject()):.2f}","tenor":tenor})
     return {"data": data}
 
 #ตัวเทส
