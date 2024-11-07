@@ -113,6 +113,7 @@ def get_data_from_db(search: Search):
         "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s",
         ('%' + search.search + '%',)
     )
+
     rows = cursor.fetchall()
 
     columns = [col[0] for col in cursor.description]
@@ -125,16 +126,37 @@ def get_data_from_db(search: Search):
         data.append(row_data)
     cursor.close()
     connection.close()
+
+    def all_subject():
+        connection = db_connect()
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT id, subject_name FROM table_database"
+        )
+        rows = cursor.fetchall()
+
+        columns = [col[0] for col in cursor.description]
+
+        allsubject = []
+        for row in rows:
+            row_data = {}
+            for column, value in zip(columns, row):
+                row_data[column] = value
+            allsubject.append(row_data)
+        for key in allsubject:
+            if key["subject_name"] not in subject:
+                subject.append(key["subject_name"])
+
     total_myscore = 0
     total_score_assignment = 0
     result = ""
+
     total_result = []
     subject = []
     for key in data:
         total_myscore += int(key["my_score"])
         total_score_assignment += int(key["score_assignment"])
-        if key["subject_name"] not in subject:
-            subject.append(key["subject_name"])
+        
     if total_myscore >= 80:
         result = "A"
         total_result.append(4.00)
