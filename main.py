@@ -110,7 +110,7 @@ def get_data_from_db(search: Search):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT id, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s",
+        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s",
         ('%' + search.search + '%',)
     )
     rows = cursor.fetchall()
