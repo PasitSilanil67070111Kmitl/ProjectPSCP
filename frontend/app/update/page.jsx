@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search_update, setSearch] = useState("");
   const [newmyscore, setScore] = useState("");
   const [id_sub, setId] = useState("");
   async function onCreate() {
     try {
-      const response = await fetch('http://127.0.0.1:8000/data', {
+      const response = await fetch('http://127.0.0.1:8000/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function Page() {
       <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
         <h1 className="font-bold text-4xl text-center mb-2 text-blue-500">ดูคะแนน</h1>
         <input
-          value={search}
+          value={search_update}
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           className="w-full border border-zinc-300 px-4 p-2 mb-2 rounded-xl"

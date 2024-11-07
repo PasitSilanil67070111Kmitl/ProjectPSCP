@@ -73,13 +73,100 @@ class update(BaseModel):
     newmyscore : int
     userid:int
     subjectAssignment:str
-    
+
 @app.put('/updatedata')
 def update_data(values: update):
     cursor = db_connect().cursor()
     cursor.execute("""UPDATE table_database SET  my_score = %s WHERE id = %s AND user_id = %s AND subject_assignment = %s """, 
     (values.newmyscore))
     cursor.connection.commit()
+
+class Search(BaseModel):
+    search_update: str
+@app.post("/update")
+def get_data_from_db(search_update: Search):
+    connection = db_connect()
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_assignment LIKE %s",
+        ('%' + search_update.search_update + '%',)
+    )
+
+    rows = cursor.fetchall()
+
+    columns = [col[0] for col in cursor.description]
+    
+    data = []
+    for row in rows:
+        row_data = {}
+        for column, value in zip(columns, row):
+            row_data[column] = value
+        data.append(row_data)
+    cursor.close()
+    connection.close()
+ 
+    def all_subject():
+        subject = [""]
+        connection = db_connect()
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT id, subject_name FROM table_database"
+        )
+        rows = cursor.fetchall()
+
+        columns = [col[0] for col in cursor.description]
+
+        allsubject = []
+        for row in rows:
+            row_data = {}
+            for column, value in zip(columns, row):
+                row_data[column] = value
+            allsubject.append(row_data)
+        for key in allsubject:
+            if key["subject_name"] not in subject:
+                subject.append(key["subject_name"])
+        return subject
+
+    total_myscore = 0
+    total_score_assignment = 0
+    result = ""
+
+    total_result = []
+    for key in data:
+        total_myscore += int(key["my_score"])
+        total_score_assignment += int(key["score_assignment"])
+        
+    if total_myscore >= 80:
+        result = "A"
+        total_result.append(4.00)
+    elif total_myscore >=75:
+        result = "B+"
+        total_result.append(3.50)
+    elif total_myscore >=70:
+        result = "B"
+        total_result.append(3.00)
+    elif total_myscore >=65:
+        result = "C+"
+        total_result.append(2.50)
+    elif total_myscore >=60:
+        result = "C"
+        total_result.append(2.00)
+    elif total_myscore >=55:
+        result = "D+"
+        total_result.append(1.50)
+    elif total_myscore >=50:
+        result = "D"
+        total_result.append(1.00)
+    else:
+        result = "F"
+        total_result.append(0)
+
+    if sum(total_result)/len(all_subject()) <2.00:
+        tenor = "ติดโปร"
+    else:
+        tenor = ""
+    data.append({"total_s":total_myscore , "total_a":total_score_assignment , "result":result ,"total_result":f"{sum(total_result)/len(all_subject()):.2f}","tenor":tenor})
+    return {"data": data}
 
 #login
 class LoginRequest(BaseModel):
