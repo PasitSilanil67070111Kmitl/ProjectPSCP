@@ -76,9 +76,17 @@ export default function Page() {
                       {item.score_assignment}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {item.my_score}
-                    </td>
+                      <input type='text' 
+                      value={newmyscore} 
+                      onChange={(e) => setScore(e.target.value)} placeholder={item.my_score}>
+                      </input></td>
 
+                    <td className='border'>
+                      <input type='text'
+                      value={id_sub}
+                      onChange={(e) => setId(e.target.value)} placeholder={item.id}> 
+                    </input>
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -114,7 +122,12 @@ export default function Page() {
             </tbody>
           </table>
         )}
-        
+        <button 
+          onClick={onUpdate} 
+          className="bg-blue-300 p-2 text-xl mb-4 w-full rounded-xl text-white"
+        >
+          บันทึกการเปลี่ยนแปลง
+        </button>
       </div>
     </div>
   );

@@ -13,6 +13,8 @@ export default function Page(){
                   <Link href={"/add-subject"} className="text-white">เพิ่มรายวิชา</Link></button>
                 <button className="bg-blue-300 p-2 text-xl mb-4 w-full rounded-xl text-white">
                   <Link href={"/show"} className="text-white">ดูคะแนน</Link></button>
+                  <button className="bg-blue-300 p-2 text-xl mb-4 w-full rounded-xl text-white">
+                  <Link href={"/update"} className="text-white">แก้ไขข้อมูล</Link></button>
             </div>
        </div>
   );
