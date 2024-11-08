@@ -6,7 +6,7 @@ export default function Page() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [newmyscore, setScore] = useState("");
-  const [id_sub, setId] = useState("");
+  const [id, setId] = useState(null);
   async function onCreate() {
     try {
       const response = await fetch('http://127.0.0.1:8000/data', {

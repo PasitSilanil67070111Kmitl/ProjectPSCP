@@ -83,12 +83,13 @@ def update_data(values: update):
 
 class search_assignment(BaseModel):
     search_update: str
+    id : int
 @app.post("/update")
 def get_data_from_db(search_update: search_assignment):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_assignment LIKE %s",
+        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_assignment LIKE %s and",
         ('%' + search_update.search_update + '%',)
     )
 
@@ -194,12 +195,13 @@ def login(request: LoginRequest):
 #ดึงข้อมูล
 class Search(BaseModel):
     search: str
+    id : int
 @app.post("/data")
 def get_data_from_db(search: Search):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s",
+        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s AND id = %s",
         ('%' + search.search + '%',)
     )
 
@@ -221,8 +223,9 @@ def get_data_from_db(search: Search):
         connection = db_connect()
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT id, subject_name FROM table_database"
-        )
+            "SELECT id, subject_name FROM table_database WHERE subject_name LIKE %s AND id = %s",
+        ('%' + search.search + '%',)
+    )
         rows = cursor.fetchall()
 
         columns = [col[0] for col in cursor.description]
