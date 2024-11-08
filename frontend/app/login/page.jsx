@@ -17,13 +17,13 @@ export default function Page() {
                 body: JSON.stringify({username_login, password_login }),
             });
    
-           const result = await response.json();
-           if (!result.success){
+            const result = await response.json();
+            if (!result.success){
             return alert("Login fail")
-           }
-           localStorage.setItem("user_id" , result.user_id)
-           alert("Login Complete")
-           router.push("/")
+            }
+            localStorage.setItem("user_id" , result.user_id)
+            alert("Login Complete")
+            router.push("/")
         }
         catch(err){
             console.log(err)

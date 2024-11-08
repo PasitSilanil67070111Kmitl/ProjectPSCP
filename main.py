@@ -34,7 +34,7 @@ def insert(values: Subject):
 
     cursor = db_connect().cursor()
     cursor.execute("INSERT INTO table_subject (user_id,subject_name, subject_id) VALUES (%s, %s, %s)", 
-                    (values.id, values.name, values.subID))
+    (values.id, values.name, values.subID))
     cursor.connection.commit()
     return {"message": "Successful"}
 
@@ -47,7 +47,7 @@ class Signup(BaseModel):
 def insert(values: Signup):
     cursor = db_connect().cursor()
     cursor.execute("INSERT INTO table_user (user_id,username, password) VALUES (%s, %s, %s)", 
-                    (values.userid, values.username, values.password))
+    (values.userid, values.username, values.password))
     cursor.connection.commit()
     return {"message": "Successful"}
 
@@ -63,7 +63,7 @@ class totoaldata(BaseModel):
 def insert(values: totoaldata):
     cursor = db_connect().cursor()
     cursor.execute("INSERT INTO table_database (user_id,subject_id,subject_name,subject_assignment,score_assignment,my_score) VALUES (%s, %s, %s,%s, %s, %s)", 
-                    (values.userid, values.subject_id, values.subject_name , values.subjectAssignment , values.scoreAssignment , values.myScore))
+    (values.userid, values.subject_id, values.subject_name , values.subjectAssignment , values.scoreAssignment , values.myScore))
     cursor.connection.commit()
 
 
@@ -201,7 +201,7 @@ def get_data_from_db(search: Search):
     connection = db_connect()
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s AND id = %s",
+        "SELECT id, subject_name, subject_assignment, score_assignment, my_score FROM table_database WHERE subject_name LIKE %s AND user_id = %s",
         ('%' + search.search + '%',search.id)
     )
 

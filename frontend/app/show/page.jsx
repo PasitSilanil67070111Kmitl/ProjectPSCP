@@ -3,18 +3,17 @@
 import { useEffect, useState } from 'react';
 
 export default function Page() {
-  const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
-  const [newmyscore, setScore] = useState("");
-  const [id, setId] = useState(null);
-  async function onCreate() {
+    const [data, setData] = useState([]);
+    const [search, setSearch] = useState("");
+    const [id, setId] = useState(null);
+    async function onCreate() {
     try {
       const response = await fetch('http://127.0.0.1:8000/data', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ search: search }),
+        body: JSON.stringify({ search: search , id}),
       });
 
       const result = await response.json();
@@ -33,12 +32,17 @@ export default function Page() {
         body: JSON.stringify({ id_sub,newmyscore }),
       });
 
+      
       const result = await response.json();
       setData(result.data);
     } catch (err) {
       console.log("Error:", err);
     }
   }
+  useEffect(() => {
+    const _id = localStorage.getItem("user_id")
+     if (_id) setId(+_id)
+ }, []);
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50 bg-cover bg-center h-64 rounded-lg shadow-md">
       <div className="bg-white p-6 border border-zinc-300 rounded-xl max-w-[700px]">
@@ -66,8 +70,8 @@ export default function Page() {
               </tr>
             </thead>
             <tbody>
-              {data.length > 1 ? (
-                data.slice(0, -1).map((item) => (
+            {data && data.length > 1 ? (
+              data.slice(0, -1).map((item) => (
                   <tr key={item.id}>
                     <td className="border border-gray-300 px-4 py-2">
                       {item.subject_assignment}
@@ -90,7 +94,7 @@ export default function Page() {
           </table>
         </div>
         <br />
-        {data.length > 0 && (
+        {data && data.length > 0 && (
           <table className="bg-white text-black w-[500px]">
             <thead>
               <tr>
